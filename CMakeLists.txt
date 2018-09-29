@@ -1,7 +1,8 @@
 cmake_minimum_required(VERSION 3.10)
 project (GameBoyEmulator LANGUAGES CXX)
 
-list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
+include(cmake/tools.cmake)
+
 file(GLOB_RECURSE CXX_SRC_FILES src/*.cpp)
 
 # set(CMAKE_CXX_CLANG_TIDY "clang-tidy;checks=-*,readability-*")
