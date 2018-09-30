@@ -3,4 +3,6 @@ cmake_install.cmake
 gameboy
 Makefile
 
+*.swp
+
 CMakeFiles/
