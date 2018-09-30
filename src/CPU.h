@@ -10,7 +10,7 @@ class CPU
 public:
     CPU(Memory&);
 
-    void tick();
+    auto tick();
 private:
     Memory& m_memory;
 };
