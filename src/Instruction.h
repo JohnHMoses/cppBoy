@@ -4,8 +4,7 @@ namespace GameBoy {
 
 class CPU;
 
-class Instruction
-{
+class Instruction {
 public:
     void execute(CPU&) const = 0;
 };
