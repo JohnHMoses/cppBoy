@@ -9,7 +9,7 @@ class CPU {
 public:
     CPU(Memory&);
 
-    auto tick();
+    auto tick() -> void;
 
 private:
     Memory& m_memory;

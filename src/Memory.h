@@ -35,11 +35,11 @@ class Memory {
 public:
     Memory();
 
-    void write8(uint8_t value, uint16_t address);
-    void write16(uint16_t value, uint16_t address);
+    auto write8(uint8_t value, uint16_t address) -> void;
+    auto write16(uint16_t value, uint16_t address) -> void;
 
-    uint8_t read8(uint16_t address);
-    uint16_t read16(uint16_t address);
+    auto read8(uint16_t address) -> uint8_t;
+    auto read16(uint16_t address) -> uint16_t;
 
 private:
     std::vector<uint8_t> m_memory;

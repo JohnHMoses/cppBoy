@@ -10,7 +10,7 @@ CPU::CPU(Memory& memory)
 {
 }
 
-auto CPU::tick()
+auto CPU::tick() -> void
 {
     // FIXME: implement CPU ticking logic
 }
