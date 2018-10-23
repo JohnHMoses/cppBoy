@@ -1,12 +1,20 @@
 #pragma once
 
+#include <stdint.h>
+
 namespace GameBoy {
 
 class CPU;
 
 class Instruction {
 public:
-    void execute(CPU&) const = 0;
+    virtual ~Instruction() = default;
+    virtual auto execute(CPU&) const -> void = 0;
+
+    auto with_cycles(uint8_t numCycles) -> Instruction&;
+
+protected:
+    uint8_t m_cycles = 0;
 };
 
 }

@@ -1,6 +1,7 @@
 
 #include "CPU.h"
 
+#include "Instruction.h"
 #include "Memory.h"
 
 namespace GameBoy {

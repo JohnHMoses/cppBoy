@@ -3,7 +3,7 @@ project (GameBoyEmulator LANGUAGES CXX)
 
 include(cmake/tools.cmake)
 
-file(GLOB_RECURSE CXX_SRC_FILES src/*.cpp)
+file(GLOB_RECURSE CXX_SRC_FILES src/*.cpp src/memory/*.cpp)
 
 # set(CMAKE_CXX_CLANG_TIDY "clang-tidy;checks=-*,readability-*")
 

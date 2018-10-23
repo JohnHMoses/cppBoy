@@ -1,5 +1,8 @@
 #pragma once
 
+#include "Addressable.h"
+
+#include <memory>
 #include <vector>
 
 namespace GameBoy {
@@ -35,11 +38,8 @@ class Memory {
 public:
     Memory();
 
-    auto write8(uint8_t value, uint16_t address) -> void;
-    auto write16(uint16_t value, uint16_t address) -> void;
-
-    auto read8(uint16_t address) -> uint8_t;
-    auto read16(uint16_t address) -> uint16_t;
+    // Returns a pointer to an interface that allows reading and writing
+    auto operator[](uint16_t address) -> std::unique_ptr<Addressable>;
 
 private:
     std::vector<uint8_t> m_memory;

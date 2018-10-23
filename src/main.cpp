@@ -1,4 +1,4 @@
-#include "Memory.h"
+#include "memory/Memory.h"
 
 using namespace GameBoy;
 

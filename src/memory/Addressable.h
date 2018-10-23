@@ -1,0 +1,19 @@
+#pragma once
+
+#include <stdint.h>
+
+namespace GameBoy {
+
+class Addressable {
+public:
+    Addressable();
+    virtual ~Addressable();
+
+    virtual auto read8() -> uint8_t = 0;
+    virtual auto read16() -> uint16_t = 0;
+
+    virtual auto write8(uint8_t value) -> void = 0;
+    virtual auto write16(uint16_t value) -> void = 0;
+};
+
+}
