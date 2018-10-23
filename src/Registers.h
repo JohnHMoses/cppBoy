@@ -11,13 +11,13 @@ enum class Register {
     F,
     H,
     L
-}
+};
 
 enum class WideRegister {
     AF,
     BC,
     DE,
     HL
-}
+};
 
 }

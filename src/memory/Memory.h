@@ -1,8 +1,10 @@
 #pragma once
 
 #include "Addressable.h"
+#include "../Registers.h"
 
 #include <memory>
+#include <unordered_map>
 #include <vector>
 
 namespace GameBoy {
@@ -43,6 +45,7 @@ public:
 
 private:
     std::vector<uint8_t> m_memory;
+    std::unordered_map<Register, uint8_t> m_registers;
 };
 
 }

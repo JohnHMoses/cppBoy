@@ -7,6 +7,6 @@ file(GLOB_RECURSE CXX_SRC_FILES src/*.cpp src/memory/*.cpp)
 
 # set(CMAKE_CXX_CLANG_TIDY "clang-tidy;checks=-*,readability-*")
 
-add_definitions(-std=c++17)
+set(CMAKE_CXX_STANDARD 17)
 
 add_executable(gameboy ${CXX_SRC_FILES})
