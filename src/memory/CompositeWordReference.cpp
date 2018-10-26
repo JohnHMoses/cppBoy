@@ -1,4 +1,5 @@
 #include "CompositeWordReference.h"
+#include "ByteAddressable.h"
 
 using namespace std;
 

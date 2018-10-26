@@ -50,8 +50,11 @@ public:
 
     auto deref(WordAddressable& addressRef) -> std::unique_ptr<ByteAddressable>;
     auto deref_word(WordAddressable& addressRef) -> std::unique_ptr<WordAddressable>;
+
 private:
     std::vector<uint8_t> m_memory;
+    uint16_t m_stackPointer;
+    uint16_t m_programCounter;
     std::unordered_map<Register, uint8_t> m_registers;
 };
 

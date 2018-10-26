@@ -1,11 +1,12 @@
 #pragma once
 
-#include "ByteAddressable.h"
 #include "WordAddressable.h"
 
 #include <memory>
 
 namespace GameBoy {
+
+class ByteAddressable;
 
 class CompositeWordReference : public WordAddressable {
 public:
