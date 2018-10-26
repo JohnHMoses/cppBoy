@@ -9,7 +9,7 @@ class CPU;
 class Instruction {
 public:
     virtual ~Instruction() = default;
-    virtual auto execute(CPU&) const -> void = 0;
+    virtual auto execute(CPU&) -> void = 0;
 
     auto with_cycles(uint8_t numCycles) -> Instruction&;
 
