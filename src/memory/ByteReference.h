@@ -7,9 +7,8 @@ namespace GameBoy {
 // References a naked byte, allows reading and writing the byte
 class ByteReference : public ByteAddressable {
 public:
-    ByteReference(uint8_t& value)
-        : m_value(value) {};
-    ~ByteReference() override = default;
+    ByteReference(uint8_t& value);
+    ~ByteReference() override;
 
     auto read8() -> uint8_t override;
 

@@ -1,26 +1,19 @@
 #pragma once
 
-#include "ByteAddressable.h"
-
-#include <memory>
+#include <stdint.h>
 
 namespace GameBoy {
 
 // Addressable which supports both 8-bit and 16-bit read/writes
-class WordAddressable : public Addressable {
+class WordAddressable {
 public:
-    WordAddressable(std::unique_ptr<ByteAddressable>&& lower, std::unique_ptr<ByteAddressable>&& upper);
-    ~WordAddressable() override;
+    virtual ~WordAddressable();
 
-    auto read8() -> uint8_t override;
-    auto read16() -> uint16_t override;
+    virtual auto read8() -> uint8_t = 0;
+    virtual auto read16() -> uint16_t = 0;
 
-    auto write8(uint8_t value) -> void override;
-    auto write16(uint16_t value) -> void override;
-
-private:
-    std::unique_ptr<ByteAddressable> m_lower;
-    std::unique_ptr<ByteAddressable> m_upper;
+    virtual auto write8(uint8_t value) -> void = 0;
+    virtual auto write16(uint16_t value) -> void = 0;
 };
 
 }

@@ -1,8 +1,7 @@
 #include "Memory.h"
 
-#include "Addressable.h"
 #include "ByteReference.h"
-#include "WordAddressable.h"
+#include "WordReference.h"
 
 namespace GameBoy {
 
@@ -23,13 +22,13 @@ Memory::Memory()
     };
 }
 
-auto Memory::operator[](uint16_t address) -> std::unique_ptr<Addressable>
+auto Memory::get_word_ref(uint16_t address) -> std::unique_ptr<WordAddressable>
 {
     // TODO: figure out what to do about overflow
     assert(address != MEM_SIZE - 1);
 
     // For now, just assume everything is a big RAM bank
-    return std::make_unique<WordAddressable>(
+    return std::make_unique<WordReference>(
         std::make_unique<ByteReference>(m_memory.at(address)),
         std::make_unique<ByteReference>(m_memory.at(address + 1)));
 }

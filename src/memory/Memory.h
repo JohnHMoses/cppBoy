@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Addressable.h"
+#include "WordAddressable.h"
 #include "../Registers.h"
 
 #include <memory>
@@ -41,7 +41,7 @@ public:
     Memory();
 
     // Returns a pointer to an interface that allows reading and writing
-    auto operator[](uint16_t address) -> std::unique_ptr<Addressable>;
+    auto get_word_ref(uint16_t address) -> std::unique_ptr<WordAddressable>;
 
 private:
     std::vector<uint8_t> m_memory;
