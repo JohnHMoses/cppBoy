@@ -5,8 +5,7 @@
 
 #include <memory>
 
-namespace GameBoy
-{
+namespace GameBoy {
 
 // Reads byte from one reference into another
 class LoadByteInstruction : public Instruction {
@@ -18,6 +17,7 @@ public:
     ~LoadByteInstruction() override;
 
     auto execute(CPU&) -> void override;
+
 private:
     std::unique_ptr<ByteReference> m_fromRef;
     std::unique_ptr<ByteReference> m_toRef;

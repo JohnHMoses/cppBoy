@@ -2,8 +2,7 @@
 
 using namespace std;
 
-namespace GameBoy
-{
+namespace GameBoy {
 
 LoadByteInstruction::LoadByteInstruction(
     std::unique_ptr<ByteReference>&& fromRef,
@@ -13,7 +12,8 @@ LoadByteInstruction::LoadByteInstruction(
 
 LoadByteInstruction::~LoadByteInstruction() = default;
 
-auto LoadByteInstruction::execute(CPU& cpu) -> void {
+auto LoadByteInstruction::execute(CPU& cpu) -> void
+{
     const auto value = m_fromRef->read8();
     m_toRef->write8(value);
 
