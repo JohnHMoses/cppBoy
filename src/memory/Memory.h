@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../Registers.h"
+#include "ByteAddressable.h"
 #include "WordAddressable.h"
 
 #include <memory>
@@ -41,8 +42,14 @@ public:
     Memory();
 
     // Returns a pointer to an interface that allows reading and writing
+    auto get_ref(uint16_t address) -> std::unique_ptr<ByteAddressable>;
     auto get_word_ref(uint16_t address) -> std::unique_ptr<WordAddressable>;
 
+    auto get_register(Register registerName) -> std::unique_ptr<ByteAddressable>;
+    auto get_word_register(WordRegister registerName) -> std::unique_ptr<WordAddressable>;
+
+    auto deref(WordAddressable& addressRef) -> std::unique_ptr<ByteAddressable>;
+    auto deref_word(WordAddressable& addressRef) -> std::unique_ptr<WordAddressable>;
 private:
     std::vector<uint8_t> m_memory;
     std::unordered_map<Register, uint8_t> m_registers;

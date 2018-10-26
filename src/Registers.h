@@ -13,11 +13,13 @@ enum class Register {
     L
 };
 
-enum class WideRegister {
+enum class WordRegister {
     AF,
     BC,
     DE,
-    HL
+    HL,
+    SP,
+    PC
 };
 
 }
