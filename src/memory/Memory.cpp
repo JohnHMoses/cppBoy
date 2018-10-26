@@ -12,13 +12,13 @@ Memory::Memory()
     : m_memory(MEM_SIZE)
 {
     m_registers = std::unordered_map<Register, uint8_t>{
-        { Register::A, 0 }
-        { Register::B, 0 }
-        { Register::C, 0 }
-        { Register::D, 0 }
-        { Register::E, 0 }
-        { Register::F, 0 }
-        { Register::H, 0 }
+        { Register::A, 0 },
+        { Register::B, 0 },
+        { Register::C, 0 },
+        { Register::D, 0 },
+        { Register::E, 0 },
+        { Register::F, 0 },
+        { Register::H, 0 },
         { Register::L, 0 }
     };
 }

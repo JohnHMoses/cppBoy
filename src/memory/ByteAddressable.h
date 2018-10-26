@@ -5,15 +5,13 @@
 namespace GameBoy {
 
 // Addressable for which only read8/write8 is defined
-// Calling read16/write16 is a programmer error
-class ByteAddressable : public Addressable {
+class ByteAddressable {
 public:
     ByteAddressable();
-    ~ByteAddressable() override;
+    virtual ~ByteAddressable();
 
-    auto read16() -> uint16_t override;
-
-    auto write16(uint16_t value) -> void override;
+    virtual auto read8() -> uint8_t = 0;
+    virtual auto write8(uint8_t value) -> void = 0;
 };
 
 }
