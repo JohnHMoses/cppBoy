@@ -13,6 +13,7 @@ public:
     auto read8() -> uint8_t override;
 
     auto write8(uint8_t value) -> void override;
+
 private:
     uint8_t& m_value;
 };

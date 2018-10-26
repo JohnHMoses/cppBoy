@@ -1,7 +1,7 @@
 #pragma once
 
-#include "WordAddressable.h"
 #include "../Registers.h"
+#include "WordAddressable.h"
 
 #include <memory>
 #include <unordered_map>

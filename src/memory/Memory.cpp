@@ -10,7 +10,7 @@ constexpr size_t MEM_SIZE = 0x100;
 Memory::Memory()
     : m_memory(MEM_SIZE)
 {
-    m_registers = std::unordered_map<Register, uint8_t>{
+    m_registers = std::unordered_map<Register, uint8_t> {
         { Register::A, 0 },
         { Register::B, 0 },
         { Register::C, 0 },

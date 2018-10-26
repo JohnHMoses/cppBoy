@@ -2,7 +2,8 @@
 
 namespace GameBoy {
 
-ByteReference::ByteReference(uint8_t& value) : m_value(value) {};
+ByteReference::ByteReference(uint8_t& value)
+    : m_value(value) {};
 
 ByteReference::~ByteReference() = default;
 
