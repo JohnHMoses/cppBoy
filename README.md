@@ -1,4 +1,4 @@
-GameBoyEmulator
+cppBoy
 ===============
 
 GameBoy emulator written in C++
