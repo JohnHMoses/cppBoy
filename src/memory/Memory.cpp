@@ -10,7 +10,7 @@ constexpr size_t MEM_SIZE = 0x10000;
 
 Memory::Memory()
     : m_memory(MEM_SIZE)
-    , m_stackPointer(0)
+    , m_stackPointer(0xFFFF)
     , m_programCounter(0)
 {
     m_registers = std::unordered_map<Register, uint8_t> {
@@ -74,13 +74,15 @@ auto Memory::get_word_register(WordRegister registerName) -> std::unique_ptr<Wor
     }
 }
 
-auto Memory::deref(WordAddressable& addressRef) -> std::unique_ptr<ByteAddressable> {
-    const auto address = addressRef.read16();
+auto Memory::deref(WordAddressable& addressRef, uint16_t offset) -> std::unique_ptr<ByteAddressable>
+{
+    const auto address = addressRef.read16() + offset;
     return get_ref(address);
 }
 
-auto Memory::deref_word(WordAddressable& addressRef) -> std::unique_ptr<WordAddressable> {
-    const auto address = addressRef.read16();
+auto Memory::deref_word(WordAddressable& addressRef, uint16_t offset) -> std::unique_ptr<WordAddressable>
+{
+    const auto address = addressRef.read16() + offset;
     return get_word_ref(address);
 }
 

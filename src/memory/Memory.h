@@ -48,8 +48,8 @@ public:
     auto get_register(Register registerName) -> std::unique_ptr<ByteAddressable>;
     auto get_word_register(WordRegister registerName) -> std::unique_ptr<WordAddressable>;
 
-    auto deref(WordAddressable& addressRef) -> std::unique_ptr<ByteAddressable>;
-    auto deref_word(WordAddressable& addressRef) -> std::unique_ptr<WordAddressable>;
+    auto deref(WordAddressable& addressRef, uint16_t offset = 0) -> std::unique_ptr<ByteAddressable>;
+    auto deref_word(WordAddressable& addressRef, uint16_t offset = 0) -> std::unique_ptr<WordAddressable>;
 
 private:
     std::vector<uint8_t> m_memory;
