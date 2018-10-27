@@ -74,4 +74,14 @@ auto Memory::get_word_register(WordRegister registerName) -> std::unique_ptr<Wor
     }
 }
 
+auto Memory::deref(WordAddressable& addressRef) -> std::unique_ptr<ByteAddressable> {
+    const auto address = addressRef.read16();
+    return get_ref(address);
+}
+
+auto Memory::deref_word(WordAddressable& addressRef) -> std::unique_ptr<WordAddressable> {
+    const auto address = addressRef.read16();
+    return get_word_ref(address);
+}
+
 }
