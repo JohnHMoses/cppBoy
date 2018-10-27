@@ -5,8 +5,8 @@ using namespace std;
 namespace GameBoy {
 
 LoadByteInstruction::LoadByteInstruction(
-    std::unique_ptr<ByteReference>&& fromRef,
-    std::unique_ptr<ByteReference>&& toRef)
+    std::unique_ptr<ByteAddressable>&& fromRef,
+    std::unique_ptr<ByteAddressable>&& toRef)
     : m_fromRef(move(fromRef))
     , m_toRef(move(toRef)) {};
 

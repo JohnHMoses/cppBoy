@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../memory/ByteReference.h"
+#include "../memory/ByteAddressable.h"
 #include "Instruction.h"
 
 #include <memory>
@@ -11,16 +11,16 @@ namespace GameBoy {
 class LoadByteInstruction : public Instruction {
 public:
     LoadByteInstruction(
-        std::unique_ptr<ByteReference>&& fromRef,
-        std::unique_ptr<ByteReference>&& toRef);
+        std::unique_ptr<ByteAddressable>&& fromRef,
+        std::unique_ptr<ByteAddressable>&& toRef);
 
     ~LoadByteInstruction() override;
 
     auto execute(CPU&) -> void override;
 
 private:
-    std::unique_ptr<ByteReference> m_fromRef;
-    std::unique_ptr<ByteReference> m_toRef;
+    std::unique_ptr<ByteAddressable> m_fromRef;
+    std::unique_ptr<ByteAddressable> m_toRef;
 };
 
 }

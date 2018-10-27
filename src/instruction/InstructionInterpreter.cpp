@@ -2,14 +2,23 @@
 
 #include "../memory/Memory.h"
 #include "../Registers.h"
+#include "../memory/ByteAddressable.h"
 #include "Instruction.h"
+#include "LoadByteInstruction.h"
 
 namespace GameBoy::InstructionInterpreter {
 
-auto interpret_next_instruction(Memory& memory) -> std::unique_ptr<Instruction>
+using namespace std;
+
+auto interpret_next_instruction(Memory& memory) -> unique_ptr<Instruction>
 {
+    unique_ptr<Instruction> instr;
     // Interpret the bytes the program counter currently points to as an instruction
-    const auto nextByte = memory.deref(*memory.get_word_register(WordRegister::PC))->read8();
+    auto programCounterRef = memory.get_word_register(WordRegister::PC);
+    const auto nextByte = memory.deref(*programCounterRef)->read8();
+    // grab some commonly used values so we don't have to redefine them for every instruction
+    auto immediateByteRef = memory.deref(*programCounterRef, 1);
+    auto immediateWordRef = memory.deref_word(*programCounterRef, 1);
     switch (nextByte) {
     case 0x00:
     case 0x01:
@@ -17,7 +26,12 @@ auto interpret_next_instruction(Memory& memory) -> std::unique_ptr<Instruction>
     case 0x03:
     case 0x04:
     case 0x05:
-    case 0x06:
+    case 0x06: // LD B,n
+        instr = move(make_unique<LoadByteInstruction>(
+            move(memory.get_register(Register::B)),
+            move(immediateByteRef)));
+        (*instr).with_cycles(8).with_instruction_length(2);
+        break;
     case 0x07:
     case 0x08:
     case 0x09:
@@ -25,7 +39,12 @@ auto interpret_next_instruction(Memory& memory) -> std::unique_ptr<Instruction>
     case 0x0B:
     case 0x0C:
     case 0x0D:
-    case 0x0E:
+    case 0x0E: // LD C,n
+        instr = move(make_unique<LoadByteInstruction>(
+            move(memory.get_register(Register::C)),
+            move(immediateByteRef)));
+        (*instr).with_cycles(8).with_instruction_length(2);
+        break;
     case 0x0F:
     case 0x10:
     case 0x11:
@@ -33,7 +52,12 @@ auto interpret_next_instruction(Memory& memory) -> std::unique_ptr<Instruction>
     case 0x13:
     case 0x14:
     case 0x15:
-    case 0x16:
+    case 0x16: // LD D,n
+        instr = move(make_unique<LoadByteInstruction>(
+            move(memory.get_register(Register::D)),
+            move(immediateByteRef)));
+        (*instr).with_cycles(8).with_instruction_length(2);
+        break;
     case 0x17:
     case 0x18:
     case 0x19:
@@ -41,7 +65,12 @@ auto interpret_next_instruction(Memory& memory) -> std::unique_ptr<Instruction>
     case 0x1B:
     case 0x1C:
     case 0x1D:
-    case 0x1E:
+    case 0x1E: // LD E,n
+        instr = move(make_unique<LoadByteInstruction>(
+            move(memory.get_register(Register::E)),
+            move(immediateByteRef)));
+        (*instr).with_cycles(8).with_instruction_length(2);
+        break;
     case 0x1F:
     case 0x20:
     case 0x21:
@@ -49,7 +78,12 @@ auto interpret_next_instruction(Memory& memory) -> std::unique_ptr<Instruction>
     case 0x23:
     case 0x24:
     case 0x25:
-    case 0x26:
+    case 0x26: // LD H,n
+        instr = move(make_unique<LoadByteInstruction>(
+            move(memory.get_register(Register::H)),
+            move(immediateByteRef)));
+        (*instr).with_cycles(8).with_instruction_length(2);
+        break;
     case 0x27:
     case 0x28:
     case 0x29:
@@ -57,7 +91,12 @@ auto interpret_next_instruction(Memory& memory) -> std::unique_ptr<Instruction>
     case 0x2B:
     case 0x2C:
     case 0x2D:
-    case 0x2E:
+    case 0x2E: // LD L,n
+        instr = move(make_unique<LoadByteInstruction>(
+            move(memory.get_register(Register::L)),
+            move(immediateByteRef)));
+        (*instr).with_cycles(8).with_instruction_length(2);
+        break;
     case 0x2F:
     case 0x30:
     case 0x31:
@@ -267,9 +306,10 @@ auto interpret_next_instruction(Memory& memory) -> std::unique_ptr<Instruction>
     case 0xFD:
     case 0xFE:
     case 0xFF:
-    default:
         abort();
     }
+
+    return instr;
 }
 
 }
