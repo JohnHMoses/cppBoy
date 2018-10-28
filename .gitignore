@@ -1,8 +1,10 @@
 CMakeCache.txt
 cmake_install.cmake
-gameboy
+gameboy*
+googletest*
 Makefile
 
 *.swp
 
 CMakeFiles/
+lib/

@@ -1,5 +1,5 @@
 
-file(GLOB_RECURSE CXX_SRC_FILES_FOR_TOOLS *.cpp *.h)
+file(GLOB_RECURSE CXX_SRC_FILES_FOR_TOOLS src/*.cpp src/*.h)
 
 find_program(CLANG_FORMAT "clang-format")
 if(CLANG_FORMAT)
