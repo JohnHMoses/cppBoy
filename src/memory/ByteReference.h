@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ByteAddressable.h"
+#include "memory/ByteAddressable.h"
 
 namespace GameBoy {
 

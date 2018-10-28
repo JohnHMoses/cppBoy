@@ -1,4 +1,4 @@
-#include "WordAddressable.h"
+#include "memory/WordAddressable.h"
 
 namespace GameBoy {
 

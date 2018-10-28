@@ -1,8 +1,8 @@
-#include "Memory.h"
+#include "memory/Memory.h"
 
-#include "ByteReference.h"
-#include "CompositeWordReference.h"
-#include "WordReference.h"
+#include "memory/ByteReference.h"
+#include "memory/CompositeWordReference.h"
+#include "memory/WordReference.h"
 
 namespace GameBoy {
 

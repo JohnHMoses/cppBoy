@@ -3,6 +3,7 @@ project (GameBoyEmulator LANGUAGES CXX)
 
 include(cmake/tools.cmake)
 
+include_directories(src)
 file(GLOB_RECURSE CXX_SRC_FILES 
     src/*.cpp
     src/instruction/*.cpp

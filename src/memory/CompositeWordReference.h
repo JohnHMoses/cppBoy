@@ -1,6 +1,6 @@
 #pragma once
 
-#include "WordAddressable.h"
+#include "memory/WordAddressable.h"
 
 #include <memory>
 

@@ -1,4 +1,4 @@
-#include "WordReference.h"
+#include "memory/WordReference.h"
 
 namespace GameBoy {
 

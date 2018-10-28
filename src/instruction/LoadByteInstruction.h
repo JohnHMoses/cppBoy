@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../memory/ByteAddressable.h"
-#include "Instruction.h"
+#include "instruction/Instruction.h"
+#include "memory/ByteAddressable.h"
 
 #include <memory>
 

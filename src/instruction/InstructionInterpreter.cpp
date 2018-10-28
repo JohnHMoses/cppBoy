@@ -1,10 +1,10 @@
-#include "InstructionInterpreter.h"
+#include "instruction/InstructionInterpreter.h"
 
-#include "../memory/Memory.h"
-#include "../Registers.h"
-#include "../memory/ByteAddressable.h"
-#include "Instruction.h"
-#include "LoadByteInstruction.h"
+#include "Registers.h"
+#include "instruction/Instruction.h"
+#include "instruction/LoadByteInstruction.h"
+#include "memory/ByteAddressable.h"
+#include "memory/Memory.h"
 
 namespace GameBoy::InstructionInterpreter {
 

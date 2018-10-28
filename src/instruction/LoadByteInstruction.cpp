@@ -1,4 +1,4 @@
-#include "LoadByteInstruction.h"
+#include "instruction/LoadByteInstruction.h"
 
 using namespace std;
 

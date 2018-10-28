@@ -1,4 +1,4 @@
-#include "ByteReference.h"
+#include "memory/ByteReference.h"
 
 namespace GameBoy {
 

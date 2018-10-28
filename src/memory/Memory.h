@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../Registers.h"
-#include "ByteAddressable.h"
-#include "WordAddressable.h"
+#include "Registers.h"
+#include "memory/ByteAddressable.h"
+#include "memory/WordAddressable.h"
 
 #include <memory>
 #include <unordered_map>

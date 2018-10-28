@@ -1,5 +1,6 @@
-#include "CompositeWordReference.h"
-#include "ByteAddressable.h"
+#include "memory/CompositeWordReference.h"
+
+#include "memory/ByteAddressable.h"
 
 using namespace std;
 

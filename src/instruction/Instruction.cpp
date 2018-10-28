@@ -1,4 +1,4 @@
-#include "Instruction.h"
+#include "instruction/Instruction.h"
 
 namespace GameBoy {
 
