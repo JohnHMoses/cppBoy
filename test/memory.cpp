@@ -1,8 +1,10 @@
 #include "gtest/gtest.h"
 
-#include "memory/CompositeWordReference.h"
 #include "memory/ByteReference.h"
+#include "memory/CompositeWordReference.h"
+#include "memory/Memory.h"
 #include "memory/WordReference.h"
+#include "Registers.h"
 
 #include <memory>
 
@@ -78,4 +80,84 @@ TEST(WordReferenceTest, WordReferenceWriteChangesUnderlyingValue) {
     WordReference wordRef(testValue);
     wordRef.write16(0x1234);
     EXPECT_EQ(testValue, 0x1234);
+}
+
+TEST(MemoryTest, GetReferenceChangesPersist) {
+    Memory mem;
+    {
+        auto testRef = mem.get_ref(0xC000);
+        testRef->write8(42);
+    }
+    {
+        auto testRef = mem.get_ref(0xC000);
+        EXPECT_EQ(testRef->read8(), 42);
+    }
+}
+
+TEST(MemoryTest, GetWordReferenceChangesPersist) {
+    Memory mem;
+    {
+        auto testRef = mem.get_word_ref(0xC000);
+        EXPECT_EQ(testRef->read16(), 0x0000);
+        EXPECT_EQ(testRef->read8(), 0x00);
+
+        testRef->write16(0x1234);
+        EXPECT_EQ(testRef->read16(), 0x1234);
+        EXPECT_EQ(testRef->read8(), 0x34);
+    }
+    {
+        auto testRef = mem.get_word_ref(0xC000);
+        EXPECT_EQ(testRef->read16(), 0x1234);
+    }
+}
+
+TEST(MemoryTest, OverlappingReferencesEffectEachOther) {
+    Memory mem;
+    {
+        auto testRef = mem.get_word_ref(0xC000);
+        testRef->write16(0x1234);
+    }
+    {
+        auto testRef = mem.get_ref(0xC002);
+        testRef->write8(0x98);
+    }
+    {
+        auto testRef = mem.get_word_ref(0xC001);
+        EXPECT_EQ(testRef->read16(), 0x9812);
+    }
+}
+
+TEST(MemoryTest, WordRegistersAreComposedOfSubValues) {
+    Memory mem;
+
+    auto refB = mem.get_register(Register::B);
+    auto refC = mem.get_register(Register::C);
+
+    refB->write8(0x34);
+    refC->write8(0x12);
+
+    auto refBC = mem.get_word_register(WordRegister::BC);
+    EXPECT_EQ(refBC->read16(), 0x1234);
+}
+
+TEST(MemoryTest, DerefPointsToAddressReadFromMemoryLocation) {
+    Memory mem;
+
+    auto testRef = mem.get_word_ref(0xCDEF);
+    testRef->write16(0x5678);
+
+
+    auto derefWith = mem.get_word_ref(0xC000);
+    derefWith->write16(0xCDEF);
+
+    auto refFromDeref = mem.deref_word(*derefWith);
+
+    EXPECT_EQ(refFromDeref->read16(), testRef->read16());
+    EXPECT_EQ(refFromDeref->read8(), testRef->read8());
+
+    testRef->write16(0xABCD);
+
+    EXPECT_EQ(refFromDeref->read16(), testRef->read16());
+    EXPECT_EQ(refFromDeref->read8(), testRef->read8());
+
 }
