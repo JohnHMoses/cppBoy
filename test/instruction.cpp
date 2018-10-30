@@ -4,11 +4,19 @@
 #include "Registers.h"
 #include "memory/Memory.h"
 #include "instruction/LoadByteInstruction.h"
+#include "instruction/Instruction.h"
 
 #include <memory>
 
 using namespace GameBoy;
 using namespace std;
+
+// Mock instruction for testing inherited behavior from instruction
+class MockInstruction : public Instruction {
+public:
+    // NO-OP perform_operation
+    auto perform_operation(CPU& cpu) -> void override { };
+};
 
 class InstructionTest : public ::testing::Test {
 protected:
@@ -20,6 +28,20 @@ protected:
     unique_ptr<CPU> cpu;
     unique_ptr<Memory> mem;
 };
+
+TEST_F(InstructionTest, BaseInstructionCanMoveProgramCounter) {
+    auto pcRef = mem->get_word_register(WordRegister::PC);
+    const auto beforeExecutePC = pcRef->read16();
+
+    MockInstruction instr;
+    instr.with_instruction_length(0x42);
+
+    instr.execute(*cpu);
+
+    const auto afterExecutePC = pcRef->read16();
+
+    EXPECT_EQ(beforeExecutePC + 0x42, afterExecutePC);
+}
 
 TEST_F(InstructionTest, LoadByte) {
     {

@@ -15,10 +15,9 @@ public:
         std::unique_ptr<ByteAddressable>&& toRef);
 
     ~LoadByteInstruction() override;
-
-    auto execute(CPU&) -> void override;
-
 private:
+    auto perform_operation(CPU&) -> void override;
+
     std::unique_ptr<ByteAddressable> m_fromRef;
     std::unique_ptr<ByteAddressable> m_toRef;
 };

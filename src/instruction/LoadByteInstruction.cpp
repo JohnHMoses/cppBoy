@@ -12,13 +12,10 @@ LoadByteInstruction::LoadByteInstruction(
 
 LoadByteInstruction::~LoadByteInstruction() = default;
 
-auto LoadByteInstruction::execute(CPU& cpu) -> void
+auto LoadByteInstruction::perform_operation(CPU& cpu) -> void
 {
     const auto value = m_fromRef->read8();
     m_toRef->write8(value);
-
-    //TODO: move stack pointer
-    //      tick until m_cycles done
 }
 
 }
