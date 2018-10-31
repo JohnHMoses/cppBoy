@@ -10,6 +10,12 @@ namespace GameBoy::InstructionInterpreter {
 
 using namespace std;
 
+auto get_ref_with_signed_offset(Memory& mem, ByteAddressable& offsetRef) -> unique_ptr<WordAddressable> {
+    const auto offsetValue = int8_t(offsetRef.read8());
+    const auto addr = 0xFF00 + offsetValue;
+    return mem.get_word_ref(addr);
+}
+
 auto interpret_next_instruction(Memory& memory) -> unique_ptr<Instruction>
 {
     // Interpret the bytes the program counter currently points to as an instruction
@@ -772,10 +778,9 @@ auto interpret_next_instruction(Memory& memory) -> unique_ptr<Instruction>
     case 0xE1:
     case 0xE2: // LD ($FF00+C),A
     {
-        const auto cValue = int8_t(memory.get_register(Register::C)->read8());
-        const auto derefAddr = 0xFF00 + cValue;
+        auto derefWith = get_ref_with_signed_offset(memory, *memory.get_register(Register::C));
         auto instr = make_unique<LoadByteInstruction>(
-            move(memory.deref(*memory.get_word_ref(derefAddr))),
+            move(memory.deref(*derefWith)),
             move(memory.get_register(Register::A)));
         (*instr).with_cycles(8).with_instruction_length(1);
         return instr;
@@ -804,11 +809,11 @@ auto interpret_next_instruction(Memory& memory) -> unique_ptr<Instruction>
     case 0xF1:
     case 0xF2: // LD A,($FF00+C)
     {
-        const auto cValue = int8_t(memory.get_register(Register::C)->read8());
-        const auto derefAddr = 0xFF00 + cValue;
+
+        auto derefWith = get_ref_with_signed_offset(memory, *memory.get_register(Register::C));
         auto instr = make_unique<LoadByteInstruction>(
             move(memory.get_register(Register::A)),
-            move(memory.deref(*memory.get_word_ref(derefAddr))));
+            move(memory.deref(*derefWith)));
         (*instr).with_cycles(8).with_instruction_length(1);
         return instr;
     }
