@@ -21,7 +21,14 @@ auto interpret_next_instruction(Memory& memory) -> unique_ptr<Instruction>
     switch (nextByte) {
     case 0x00:
     case 0x01:
-    case 0x02:
+    case 0x02: // LD (BC),A
+    {
+        auto instr = make_unique<LoadByteInstruction>(
+            move(memory.get_register(Register::A)),
+            move(memory.deref(*memory.get_word_register(WordRegister::BC))));
+        (*instr).with_cycles(8).with_instruction_length(1);
+        return instr;
+    }
     case 0x03:
     case 0x04:
     case 0x05:
@@ -58,7 +65,14 @@ auto interpret_next_instruction(Memory& memory) -> unique_ptr<Instruction>
     case 0x0F:
     case 0x10:
     case 0x11:
-    case 0x12:
+    case 0x12: // LD (DE),A
+    {
+        auto instr = make_unique<LoadByteInstruction>(
+            move(memory.get_register(Register::A)),
+            move(memory.deref(*memory.get_word_register(WordRegister::DE))));
+        (*instr).with_cycles(8).with_instruction_length(1);
+        return instr;
+    }
     case 0x13:
     case 0x14:
     case 0x15:
@@ -209,7 +223,14 @@ auto interpret_next_instruction(Memory& memory) -> unique_ptr<Instruction>
         (*instr).with_cycles(8).with_instruction_length(1);
         return instr;
     }
-    case 0x47:
+    case 0x47: // LD B,A
+    {
+        auto instr = make_unique<LoadByteInstruction>(
+            move(memory.get_register(Register::A)),
+            move(memory.get_register(Register::B)));
+        (*instr).with_cycles(4).with_instruction_length(1);
+        return instr;
+    }
     case 0x48: // LD C,B
     {
         auto instr = make_unique<LoadByteInstruction>(
@@ -266,7 +287,14 @@ auto interpret_next_instruction(Memory& memory) -> unique_ptr<Instruction>
         (*instr).with_cycles(8).with_instruction_length(1);
         return instr;
     }
-    case 0x4F:
+    case 0x4F: // LD C,A
+    {
+        auto instr = make_unique<LoadByteInstruction>(
+            move(memory.get_register(Register::A)),
+            move(memory.get_register(Register::C)));
+        (*instr).with_cycles(4).with_instruction_length(1);
+        return instr;
+    }
     case 0x50: // LD D,B
     {
         auto instr = make_unique<LoadByteInstruction>(
@@ -323,7 +351,14 @@ auto interpret_next_instruction(Memory& memory) -> unique_ptr<Instruction>
         (*instr).with_cycles(8).with_instruction_length(1);
         return instr;
     }
-    case 0x57:
+    case 0x57: // LD D,A
+    {
+        auto instr = make_unique<LoadByteInstruction>(
+            move(memory.get_register(Register::A)),
+            move(memory.get_register(Register::D)));
+        (*instr).with_cycles(4).with_instruction_length(1);
+        return instr;
+    }
     case 0x58: // LD E,B
     {
         auto instr = make_unique<LoadByteInstruction>(
@@ -380,7 +415,14 @@ auto interpret_next_instruction(Memory& memory) -> unique_ptr<Instruction>
         (*instr).with_cycles(8).with_instruction_length(1);
         return instr;
     }
-    case 0x5F:
+    case 0x5F: // LD E,A
+    {
+        auto instr = make_unique<LoadByteInstruction>(
+            move(memory.get_register(Register::A)),
+            move(memory.get_register(Register::E)));
+        (*instr).with_cycles(4).with_instruction_length(1);
+        return instr;
+    }
     case 0x60: // LD H,B
     {
         auto instr = make_unique<LoadByteInstruction>(
@@ -437,7 +479,14 @@ auto interpret_next_instruction(Memory& memory) -> unique_ptr<Instruction>
         (*instr).with_cycles(8).with_instruction_length(1);
         return instr;
     }
-    case 0x67:
+    case 0x67: // LD H,A
+    {
+        auto instr = make_unique<LoadByteInstruction>(
+            move(memory.get_register(Register::A)),
+            move(memory.get_register(Register::H)));
+        (*instr).with_cycles(4).with_instruction_length(1);
+        return instr;
+    }
     case 0x68: // LD L,B
     {
         auto instr = make_unique<LoadByteInstruction>(
@@ -494,7 +543,14 @@ auto interpret_next_instruction(Memory& memory) -> unique_ptr<Instruction>
         (*instr).with_cycles(8).with_instruction_length(1);
         return instr;
     }
-    case 0x6F:
+    case 0x6F: // LD L,A
+    {
+        auto instr = make_unique<LoadByteInstruction>(
+            move(memory.get_register(Register::A)),
+            move(memory.get_register(Register::L)));
+        (*instr).with_cycles(4).with_instruction_length(1);
+        return instr;
+    }
     case 0x70: // LD (HL),B
     {
         auto instr = make_unique<LoadByteInstruction>(
@@ -544,7 +600,14 @@ auto interpret_next_instruction(Memory& memory) -> unique_ptr<Instruction>
         return instr;
     }
     case 0x76:
-    case 0x77:
+    case 0x77: // LD (HL),A
+    {
+        auto instr = make_unique<LoadByteInstruction>(
+            move(memory.get_register(Register::A)),
+            move(memory.deref(*memory.get_word_register(WordRegister::HL))));
+        (*instr).with_cycles(8).with_instruction_length(1);
+        return instr;
+    }
     case 0x78: // LD A,B
     {
         auto instr = make_unique<LoadByteInstruction>(
@@ -715,7 +778,14 @@ auto interpret_next_instruction(Memory& memory) -> unique_ptr<Instruction>
     case 0xE7:
     case 0xE8:
     case 0xE9:
-    case 0xEA:
+    case 0xEA: // LD (a16),A
+    {
+        auto instr = make_unique<LoadByteInstruction>(
+            move(memory.get_register(Register::A)),
+            move(memory.deref(*immediateWordRef)));
+        (*instr).with_cycles(8).with_instruction_length(1);
+        return instr;
+    }
     case 0xEB:
     case 0xEC:
     case 0xED:
