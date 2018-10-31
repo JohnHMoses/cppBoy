@@ -770,7 +770,16 @@ auto interpret_next_instruction(Memory& memory) -> unique_ptr<Instruction>
     case 0xDF:
     case 0xE0:
     case 0xE1:
-    case 0xE2:
+    case 0xE2: // LD ($FF00+C),A
+    {
+        const auto cValue = int8_t(memory.get_register(Register::C)->read8());
+        const auto derefAddr = 0xFF00 + cValue;
+        auto instr = make_unique<LoadByteInstruction>(
+            move(memory.deref(*memory.get_word_ref(derefAddr))),
+            move(memory.get_register(Register::A)));
+        (*instr).with_cycles(8).with_instruction_length(1);
+        return instr;
+    }
     case 0xE3:
     case 0xE4:
     case 0xE5:
@@ -793,7 +802,16 @@ auto interpret_next_instruction(Memory& memory) -> unique_ptr<Instruction>
     case 0xEF:
     case 0xF0:
     case 0xF1:
-    case 0xF2:
+    case 0xF2: // LD A,($FF00+C)
+    {
+        const auto cValue = int8_t(memory.get_register(Register::C)->read8());
+        const auto derefAddr = 0xFF00 + cValue;
+        auto instr = make_unique<LoadByteInstruction>(
+            move(memory.get_register(Register::A)),
+            move(memory.deref(*memory.get_word_ref(derefAddr))));
+        (*instr).with_cycles(8).with_instruction_length(1);
+        return instr;
+    }
     case 0xF3:
     case 0xF4:
     case 0xF5:
