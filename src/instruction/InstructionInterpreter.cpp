@@ -36,7 +36,14 @@ auto interpret_next_instruction(Memory& memory) -> unique_ptr<Instruction>
     case 0x07:
     case 0x08:
     case 0x09:
-    case 0x0A:
+    case 0x0A: // LD A,(BC)
+    {
+        auto instr = make_unique<LoadByteInstruction>(
+            move(memory.deref(*memory.get_word_register(WordRegister::BC))),
+            move(memory.get_register(Register::A)));
+        (*instr).with_cycles(8).with_instruction_length(1);
+        return instr;
+    }
     case 0x0B:
     case 0x0C:
     case 0x0D:
@@ -66,7 +73,14 @@ auto interpret_next_instruction(Memory& memory) -> unique_ptr<Instruction>
     case 0x17:
     case 0x18:
     case 0x19:
-    case 0x1A:
+    case 0x1A: // LD A,(DE)
+    {
+        auto instr = make_unique<LoadByteInstruction>(
+            move(memory.deref(*memory.get_word_register(WordRegister::DE))),
+            move(memory.get_register(Register::A)));
+        (*instr).with_cycles(8).with_instruction_length(1);
+        return instr;
+    }
     case 0x1B:
     case 0x1C:
     case 0x1D:
@@ -130,7 +144,14 @@ auto interpret_next_instruction(Memory& memory) -> unique_ptr<Instruction>
     case 0x3B:
     case 0x3C:
     case 0x3D:
-    case 0x3E:
+    case 0x3E: // LD A,d8
+    {
+        auto instr = make_unique<LoadByteInstruction>(
+            move(immediateByteRef),
+            move(memory.get_register(Register::A)));
+        (*instr).with_cycles(8).with_instruction_length(1);
+        return instr;
+    }
     case 0x3F:
     case 0x40: // LD B,B
     {
@@ -710,7 +731,14 @@ auto interpret_next_instruction(Memory& memory) -> unique_ptr<Instruction>
     case 0xF7:
     case 0xF8:
     case 0xF9:
-    case 0xFA:
+    case 0xFA: // LD A,(nn)
+    {
+        auto instr = make_unique<LoadByteInstruction>(
+            move(memory.deref(*immediateWordRef)),
+            move(memory.get_register(Register::A)));
+        (*instr).with_cycles(16).with_instruction_length(3);
+        return instr;
+    }
     case 0xFB:
     case 0xFC:
     case 0xFD:
