@@ -28,7 +28,14 @@ auto interpret_next_instruction(Memory& memory) -> unique_ptr<Instruction>
     auto immediateWordRef = memory.deref_word(*programCounterRef, 1);
     switch (nextByte) {
     case 0x00:
-    case 0x01:
+    case 0x01: // LD BC,d16
+    {
+        auto instr = make_unique<LoadWordInstruction>(
+            move(immediateWordRef),
+            move(memory.get_word_register(WordRegister::BC)));
+        (*instr).with_cycles(12).with_instruction_length(3);
+        return instr;
+    }
     case 0x02: // LD (BC),A
     {
         auto instr = make_unique<LoadByteInstruction>(
@@ -72,7 +79,14 @@ auto interpret_next_instruction(Memory& memory) -> unique_ptr<Instruction>
     }
     case 0x0F:
     case 0x10:
-    case 0x11:
+    case 0x11: // LD DE,d16
+    {
+        auto instr = make_unique<LoadWordInstruction>(
+            move(immediateWordRef),
+            move(memory.get_word_register(WordRegister::DE)));
+        (*instr).with_cycles(12).with_instruction_length(3);
+        return instr;
+    }
     case 0x12: // LD (DE),A
     {
         auto instr = make_unique<LoadByteInstruction>(
@@ -116,7 +130,14 @@ auto interpret_next_instruction(Memory& memory) -> unique_ptr<Instruction>
     }
     case 0x1F:
     case 0x20:
-    case 0x21:
+    case 0x21: // LD HL,d16
+    {
+        auto instr = make_unique<LoadWordInstruction>(
+            move(immediateWordRef),
+            move(memory.get_word_register(WordRegister::HL)));
+        (*instr).with_cycles(12).with_instruction_length(3);
+        return instr;
+    }
     case 0x22: // LD (HL+),A
     {
         auto instr = make_unique<LoadByteInstruction>(
@@ -164,7 +185,14 @@ auto interpret_next_instruction(Memory& memory) -> unique_ptr<Instruction>
     }
     case 0x2F:
     case 0x30:
-    case 0x31:
+    case 0x31: // LD SP,d16
+    {
+        auto instr = make_unique<LoadWordInstruction>(
+            move(immediateWordRef),
+            move(memory.get_word_register(WordRegister::SP)));
+        (*instr).with_cycles(12).with_instruction_length(3);
+        return instr;
+    }
     case 0x32: // LD (HL-),A
     {
         auto instr = make_unique<LoadByteInstruction>(
