@@ -115,7 +115,16 @@ auto interpret_next_instruction(Memory& memory) -> unique_ptr<Instruction>
     case 0x1F:
     case 0x20:
     case 0x21:
-    case 0x22:
+    case 0x22: // LD (HL+),A
+    {
+        auto instr = make_unique<LoadByteInstruction>(
+            move(memory.get_register(Register::A)),
+            move(memory.deref(*memory.get_word_register(WordRegister::HL))));
+        (*instr).with_cycles(8).with_instruction_length(1).then([&memory] () {
+            auto regHL = memory.get_word_register(WordRegister::HL);
+            regHL->write16(regHL->read16() + 1);
+        });
+    }
     case 0x23:
     case 0x24:
     case 0x25:
@@ -130,7 +139,16 @@ auto interpret_next_instruction(Memory& memory) -> unique_ptr<Instruction>
     case 0x27:
     case 0x28:
     case 0x29:
-    case 0x2A:
+    case 0x2A: // LD A,(HL+)
+    {
+        auto instr = make_unique<LoadByteInstruction>(
+            move(memory.deref(*memory.get_word_register(WordRegister::HL))),
+            move(memory.get_register(Register::A)));
+        (*instr).with_cycles(8).with_instruction_length(1).then([&memory] () {
+            auto regHL = memory.get_word_register(WordRegister::HL);
+            regHL->write16(regHL->read16() + 1);
+        });
+    }
     case 0x2B:
     case 0x2C:
     case 0x2D:
@@ -145,7 +163,16 @@ auto interpret_next_instruction(Memory& memory) -> unique_ptr<Instruction>
     case 0x2F:
     case 0x30:
     case 0x31:
-    case 0x32:
+    case 0x32: // LD (HL-),A
+    {
+        auto instr = make_unique<LoadByteInstruction>(
+            move(memory.get_register(Register::A)),
+            move(memory.deref(*memory.get_word_register(WordRegister::HL))));
+        (*instr).with_cycles(8).with_instruction_length(1).then([&memory] () {
+            auto regHL = memory.get_word_register(WordRegister::HL);
+            regHL->write16(regHL->read16() - 1);
+        });
+    }
     case 0x33:
     case 0x34:
     case 0x35:
@@ -160,7 +187,16 @@ auto interpret_next_instruction(Memory& memory) -> unique_ptr<Instruction>
     case 0x37:
     case 0x38:
     case 0x39:
-    case 0x3A:
+    case 0x3A: // LD A,(HL-)
+    {
+        auto instr = make_unique<LoadByteInstruction>(
+            move(memory.deref(*memory.get_word_register(WordRegister::HL))),
+            move(memory.get_register(Register::A)));
+        (*instr).with_cycles(8).with_instruction_length(1).then([&memory] () {
+            auto regHL = memory.get_word_register(WordRegister::HL);
+            regHL->write16(regHL->read16() - 1);
+        });
+    }
     case 0x3B:
     case 0x3C:
     case 0x3D:
