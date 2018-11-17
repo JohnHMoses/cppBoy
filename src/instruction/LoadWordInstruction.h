@@ -15,6 +15,7 @@ public:
         std::unique_ptr<WordAddressable>&& toRef);
 
     ~LoadWordInstruction() override;
+
 private:
     auto perform_operation(CPU&) -> void override;
 

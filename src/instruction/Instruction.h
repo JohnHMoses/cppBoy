@@ -1,8 +1,8 @@
 #pragma once
 
+#include <functional>
 #include <stdint.h>
 #include <vector>
-#include <functional>
 
 namespace GameBoy {
 

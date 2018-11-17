@@ -3,6 +3,7 @@
 #include "Registers.h"
 #include "instruction/Instruction.h"
 #include "instruction/LoadByteInstruction.h"
+#include "instruction/LoadWordInstruction.h"
 #include "memory/ByteAddressable.h"
 #include "memory/Memory.h"
 
@@ -10,7 +11,8 @@ namespace GameBoy::InstructionInterpreter {
 
 using namespace std;
 
-auto get_ref_with_signed_offset(Memory& mem, ByteAddressable& offsetRef) -> unique_ptr<WordAddressable> {
+auto get_ref_with_signed_offset(Memory& mem, ByteAddressable& offsetRef) -> unique_ptr<WordAddressable>
+{
     const auto offsetValue = int8_t(offsetRef.read8());
     const auto addr = 0xFF00 + offsetValue;
     return mem.get_word_ref(addr);
@@ -120,7 +122,7 @@ auto interpret_next_instruction(Memory& memory) -> unique_ptr<Instruction>
         auto instr = make_unique<LoadByteInstruction>(
             move(memory.get_register(Register::A)),
             move(memory.deref(*memory.get_word_register(WordRegister::HL))));
-        (*instr).with_cycles(8).with_instruction_length(1).then([&memory] () {
+        (*instr).with_cycles(8).with_instruction_length(1).then([&memory]() {
             auto regHL = memory.get_word_register(WordRegister::HL);
             regHL->write16(regHL->read16() + 1);
         });
@@ -144,7 +146,7 @@ auto interpret_next_instruction(Memory& memory) -> unique_ptr<Instruction>
         auto instr = make_unique<LoadByteInstruction>(
             move(memory.deref(*memory.get_word_register(WordRegister::HL))),
             move(memory.get_register(Register::A)));
-        (*instr).with_cycles(8).with_instruction_length(1).then([&memory] () {
+        (*instr).with_cycles(8).with_instruction_length(1).then([&memory]() {
             auto regHL = memory.get_word_register(WordRegister::HL);
             regHL->write16(regHL->read16() + 1);
         });
@@ -168,7 +170,7 @@ auto interpret_next_instruction(Memory& memory) -> unique_ptr<Instruction>
         auto instr = make_unique<LoadByteInstruction>(
             move(memory.get_register(Register::A)),
             move(memory.deref(*memory.get_word_register(WordRegister::HL))));
-        (*instr).with_cycles(8).with_instruction_length(1).then([&memory] () {
+        (*instr).with_cycles(8).with_instruction_length(1).then([&memory]() {
             auto regHL = memory.get_word_register(WordRegister::HL);
             regHL->write16(regHL->read16() - 1);
         });
@@ -192,7 +194,7 @@ auto interpret_next_instruction(Memory& memory) -> unique_ptr<Instruction>
         auto instr = make_unique<LoadByteInstruction>(
             move(memory.deref(*memory.get_word_register(WordRegister::HL))),
             move(memory.get_register(Register::A)));
-        (*instr).with_cycles(8).with_instruction_length(1).then([&memory] () {
+        (*instr).with_cycles(8).with_instruction_length(1).then([&memory]() {
             auto regHL = memory.get_word_register(WordRegister::HL);
             regHL->write16(regHL->read16() - 1);
         });
@@ -821,7 +823,7 @@ auto interpret_next_instruction(Memory& memory) -> unique_ptr<Instruction>
     }
     case 0xE1:
     case 0xE2: // LD ($FF00+C),A
-    {   // FIXME: Is this the wrong order?
+    { // FIXME: Is this the wrong order?
         auto derefWith = get_ref_with_signed_offset(memory, *memory.get_register(Register::C));
         auto instr = make_unique<LoadByteInstruction>(
             move(memory.deref(*derefWith)),
