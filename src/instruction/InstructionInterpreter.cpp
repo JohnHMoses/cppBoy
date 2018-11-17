@@ -905,7 +905,14 @@ auto interpret_next_instruction(Memory& memory) -> unique_ptr<Instruction>
     case 0xF6:
     case 0xF7:
     case 0xF8:
-    case 0xF9:
+    case 0xF9: // LD SP,HL
+    {
+        auto instr = make_unique<LoadWordInstruction>(
+            move(memory.get_word_register(WordRegister::HL)),
+            move(memory.get_word_register(WordRegister::SP)));
+        (*instr).with_cycles(8).with_instruction_length(1);
+        return instr;
+    }
     case 0xFA: // LD A,(nn)
     {
         auto instr = make_unique<LoadByteInstruction>(
