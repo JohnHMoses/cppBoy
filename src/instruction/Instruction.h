@@ -1,6 +1,8 @@
 #pragma once
 
 #include <stdint.h>
+#include <vector>
+#include <functional>
 
 namespace GameBoy {
 
@@ -13,6 +15,7 @@ public:
 
     auto with_cycles(uint8_t numCycles) -> Instruction&;
     auto with_instruction_length(uint16_t numBytes) -> Instruction&;
+    auto then(std::function<void()>) -> Instruction&;
 
 private:
     virtual auto perform_operation(CPU&) -> void = 0;
@@ -22,6 +25,7 @@ private:
 protected:
     uint8_t m_cycles = 0;
     uint16_t m_numBytes = 0;
+    std::vector<std::function<void()>> m_postOperationActions = {};
 };
 
 }

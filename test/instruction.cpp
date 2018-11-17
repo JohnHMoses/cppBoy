@@ -61,3 +61,19 @@ TEST_F(InstructionTest, LoadByte) {
     EXPECT_EQ(refA->read8(), 0x12);
     EXPECT_EQ(refB->read8(), 0x12);
 }
+
+TEST_F(InstructionTest, Then) {
+    auto refA = mem->get_register(Register::A);
+    auto& refToA = *refA;
+    auto postOp = [&refToA] () {
+        refToA.write8(0x12);
+    };
+
+    MockInstruction instr;
+    instr.then(postOp);
+
+    EXPECT_EQ(refA->read8(), 0x00);
+
+    instr.execute(*cpu);
+    EXPECT_EQ(refA->read8(), 0x12);
+}

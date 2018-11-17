@@ -8,6 +8,8 @@ namespace GameBoy {
 auto Instruction::execute(CPU& cpu) -> void
 {
     perform_operation(cpu);
+    for (auto& postOp : m_postOperationActions)
+        postOp();
     move_program_counter(cpu);
     tick_clock(cpu);
 }
@@ -21,6 +23,12 @@ auto Instruction::with_cycles(uint8_t numCycles) -> Instruction&
 auto Instruction::with_instruction_length(uint16_t numBytes) -> Instruction&
 {
     m_numBytes = numBytes;
+    return *this;
+}
+
+auto Instruction::then(std::function<void()> action) -> Instruction&
+{
+    m_postOperationActions.push_back(action);
     return *this;
 }
 
