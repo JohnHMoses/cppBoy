@@ -810,10 +810,18 @@ auto interpret_next_instruction(Memory& memory) -> unique_ptr<Instruction>
     case 0xDD:
     case 0xDE:
     case 0xDF:
-    case 0xE0:
+    case 0xE0: // LDH ($FF00+a8),A
+    {
+        auto derefWith = get_ref_with_signed_offset(memory, *immediateByteRef);
+        auto instr = make_unique<LoadByteInstruction>(
+            move(memory.get_register(Register::A)),
+            move(memory.deref(*derefWith)));
+        (*instr).with_cycles(12).with_instruction_length(2);
+        return instr;
+    }
     case 0xE1:
     case 0xE2: // LD ($FF00+C),A
-    {
+    {   // FIXME: Is this the wrong order?
         auto derefWith = get_ref_with_signed_offset(memory, *memory.get_register(Register::C));
         auto instr = make_unique<LoadByteInstruction>(
             move(memory.deref(*derefWith)),
@@ -841,7 +849,15 @@ auto interpret_next_instruction(Memory& memory) -> unique_ptr<Instruction>
     case 0xED:
     case 0xEE:
     case 0xEF:
-    case 0xF0:
+    case 0xF0: // LDH A,($FF00+a8)
+    {
+        auto derefWith = get_ref_with_signed_offset(memory, *immediateByteRef);
+        auto instr = make_unique<LoadByteInstruction>(
+            move(memory.deref(*derefWith)),
+            move(memory.get_register(Register::A)));
+        (*instr).with_cycles(12).with_instruction_length(2);
+        return instr;
+    }
     case 0xF1:
     case 0xF2: // LD A,($FF00+C)
     {
