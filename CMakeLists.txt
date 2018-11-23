@@ -15,6 +15,7 @@ file(GLOB_RECURSE CXX_LIB_SRC_FILES
     src/*.cpp
     src/instruction/*.cpp
     src/memory/*.cpp
+    src/util/*.cpp
 )
 
 file(GLOB_RECURSE CXX_TEST_FILES

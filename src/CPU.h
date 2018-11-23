@@ -1,5 +1,7 @@
 #pragma once
 
+#include "memory/FlagRegister.h"
+
 #include <memory>
 
 namespace GameBoy {
@@ -15,6 +17,7 @@ public:
     auto tick() -> void;
     auto get_program_counter() -> std::unique_ptr<WordAddressable>;
     auto get_stack_pointer() -> std::unique_ptr<WordAddressable>;
+    auto get_flags() -> FlagRegister;
 
     Memory& memory;
 };

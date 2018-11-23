@@ -28,4 +28,9 @@ auto CPU::get_stack_pointer() -> unique_ptr<WordAddressable>
     return memory.get_word_register(WordRegister::SP);
 }
 
+auto CPU::get_flags() -> FlagRegister
+{
+    return FlagRegister(move(memory.get_register(Register::F)));
+}
+
 }
