@@ -4,6 +4,7 @@
 #include "Registers.h"
 #include "memory/Memory.h"
 #include "instruction/LoadByteInstruction.h"
+#include "instruction/PushInstruction.h"
 #include "instruction/Instruction.h"
 
 #include <memory>
@@ -76,4 +77,19 @@ TEST_F(InstructionTest, Then) {
 
     instr.execute(*cpu);
     EXPECT_EQ(refA->read8(), 0x12);
+}
+
+TEST_F(InstructionTest, Push) {
+    auto regHL = mem->get_word_register(WordRegister::HL);
+    regHL->write16(0x1234);
+
+    auto stackPointer = cpu->get_stack_pointer();
+    stackPointer->write16(0xC002);
+
+    auto refToPushedLocation = mem->get_word_ref(0xC000);
+
+    PushInstruction instr(move(regHL));
+    instr.execute(*cpu);
+
+    EXPECT_EQ(refToPushedLocation->read16(), 0x1234);
 }
