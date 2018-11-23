@@ -56,7 +56,13 @@ auto interpret_next_instruction(Memory& memory) -> unique_ptr<Instruction>
         return instr;
     }
     case 0x07:
-    case 0x08:
+    case 0x08: // LD (a16),SP
+    {
+        auto instr = make_unique<LoadWordInstruction>(
+            move(memory.get_word_ref(WordReference::SP)),
+            move(memory.deref(*immediateWordRef)));
+        (*instr).with_cycles(20).with_instruction_length(3);
+    }
     case 0x09:
     case 0x0A: // LD A,(BC)
     {
@@ -901,10 +907,25 @@ auto interpret_next_instruction(Memory& memory) -> unique_ptr<Instruction>
     }
     case 0xF3:
     case 0xF4:
-    case 0xF5:
+    case 0xF5: // PUSH AF
+    { // TODO: NOT DONE
+        auto instr = make_unique<LoadWordInstruction>(
+            move(memory.get_word_register(WordRegister::HL)),
+            move(memory.deref(*memory.get_word_register(WordRegister::SP))));
+        (*instr).with_cycles(8).with_instruction_length(1);
+        return instr;
+    }
     case 0xF6:
     case 0xF7:
-    case 0xF8:
+    case 0xF8: // LS HL,SP+r8
+    { // TODO: Flags?
+        uint16_t effectiveAddress = memory.get_word_register(WordRegister::SP)->read16() + int8_t(immediateByteRef->read8());
+        auto instr = make_unique<LoadWordInstruction>(
+            move(memory.get_word_ref(effectiveAddress)),
+            move(memory.get_word_register(WordRegister::HL)));
+        (*instr).with_cycles(12).with_instruction_length(2);
+        return instr;
+    }
     case 0xF9: // LD SP,HL
     {
         auto instr = make_unique<LoadWordInstruction>(
