@@ -4,6 +4,7 @@
 #include "instruction/Instruction.h"
 #include "instruction/LoadByteInstruction.h"
 #include "instruction/LoadWordInstruction.h"
+#include "instruction/PopInstruction.h"
 #include "instruction/PushInstruction.h"
 #include "memory/ByteAddressable.h"
 #include "memory/Memory.h"
@@ -833,7 +834,13 @@ auto interpret_next_instruction(Memory& memory) -> unique_ptr<Instruction>
     case 0xBE:
     case 0xBF:
     case 0xC0:
-    case 0xC1:
+    case 0xC1: // POP BC
+    {
+        auto instr = make_unique<PopInstruction>(
+            move(regBC));
+        (*instr).with_cycles(12).with_instruction_length(1);
+        return instr;
+    }
     case 0xC2:
     case 0xC3:
     case 0xC4:
@@ -855,7 +862,13 @@ auto interpret_next_instruction(Memory& memory) -> unique_ptr<Instruction>
     case 0xCE:
     case 0xCF:
     case 0xD0:
-    case 0xD1:
+    case 0xD1: // POP DE
+    {
+        auto instr = make_unique<PopInstruction>(
+            move(regDE));
+        (*instr).with_cycles(12).with_instruction_length(1);
+        return instr;
+    }
     case 0xD2:
     case 0xD3:
     case 0xD4:
@@ -885,7 +898,13 @@ auto interpret_next_instruction(Memory& memory) -> unique_ptr<Instruction>
         (*instr).with_cycles(12).with_instruction_length(2);
         return instr;
     }
-    case 0xE1:
+    case 0xE1: // POP HL
+    {
+        auto instr = make_unique<PopInstruction>(
+            move(regHL));
+        (*instr).with_cycles(12).with_instruction_length(1);
+        return instr;
+    }
     case 0xE2: // LD ($FF00+C),A
     { // FIXME: Is this the wrong order?
         auto derefWith = get_ref_with_signed_offset(memory, *regC);
@@ -930,7 +949,13 @@ auto interpret_next_instruction(Memory& memory) -> unique_ptr<Instruction>
         (*instr).with_cycles(12).with_instruction_length(2);
         return instr;
     }
-    case 0xF1:
+    case 0xF1: // POP AF
+    {
+        auto instr = make_unique<PopInstruction>(
+            move(regAF));
+        (*instr).with_cycles(12).with_instruction_length(1);
+        return instr;
+    }
     case 0xF2: // LD A,($FF00+C)
     {
 

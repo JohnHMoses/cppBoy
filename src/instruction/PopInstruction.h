@@ -7,17 +7,17 @@
 
 namespace GameBoy {
 
-class PushInstruction : public Instruction {
+class PopInstruction : public Instruction {
 public:
-    PushInstruction(
-        std::unique_ptr<WordAddressable>&& fromRef);
+    PopInstruction(
+        std::unique_ptr<WordAddressable>&& toRef);
 
-    ~PushInstruction() override;
+    ~PopInstruction() override;
 
 private:
     auto perform_operation(CPU&) -> void override;
 
-    std::unique_ptr<WordAddressable> m_fromRef;
+    std::unique_ptr<WordAddressable> m_toRef;
 };
 
 }

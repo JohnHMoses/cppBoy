@@ -5,6 +5,7 @@
 #include "memory/Memory.h"
 #include "instruction/LoadByteInstruction.h"
 #include "instruction/PushInstruction.h"
+#include "instruction/PopInstruction.h"
 #include "instruction/Instruction.h"
 
 #include <memory>
@@ -92,4 +93,22 @@ TEST_F(InstructionTest, Push) {
     instr.execute(*cpu);
 
     EXPECT_EQ(refToPushedLocation->read16(), 0x1234);
+    EXPECT_EQ(stackPointer->read16(), 0xC000);
+}
+
+TEST_F(InstructionTest, Pop) {
+    auto regHL = mem->get_word_register(WordRegister::HL);
+    auto& refHL = *regHL;
+
+    auto stackPointer = cpu->get_stack_pointer();
+    stackPointer->write16(0xC000);
+
+    auto refToPoppedFromLocation = mem->get_word_ref(0xC000);
+    refToPoppedFromLocation->write16(0x1234);
+
+    PopInstruction instr(move(regHL));
+    instr.execute(*cpu);
+
+    EXPECT_EQ(refHL.read16(), 0x1234);
+    EXPECT_EQ(stackPointer->read16(), 0xC002);
 }
