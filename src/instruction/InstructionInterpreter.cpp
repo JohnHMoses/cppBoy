@@ -24,6 +24,7 @@ auto interpret_next_instruction(Memory& memory) -> unique_ptr<Instruction>
     auto programCounterRef = memory.get_word_register(WordRegister::PC);
     const auto nextByte = memory.deref(*programCounterRef)->read8();
     // grab some commonly used values so we don't have to redefine them for every instruction
+    auto regA = memory.get_register(Register::A);
     auto immediateByteRef = memory.deref(*programCounterRef, 1);
     auto immediateWordRef = memory.deref_word(*programCounterRef, 1);
     switch (nextByte) {
@@ -39,7 +40,7 @@ auto interpret_next_instruction(Memory& memory) -> unique_ptr<Instruction>
     case 0x02: // LD (BC),A
     {
         auto instr = make_unique<LoadByteInstruction>(
-            move(memory.get_register(Register::A)),
+            move(regA),
             move(memory.deref(*memory.get_word_register(WordRegister::BC))));
         (*instr).with_cycles(8).with_instruction_length(1);
         return instr;
@@ -59,8 +60,8 @@ auto interpret_next_instruction(Memory& memory) -> unique_ptr<Instruction>
     case 0x08: // LD (a16),SP
     {
         auto instr = make_unique<LoadWordInstruction>(
-            move(memory.get_word_ref(WordReference::SP)),
-            move(memory.deref(*immediateWordRef)));
+            move(memory.get_word_register(WordRegister::SP)),
+            move(memory.deref_word(*immediateWordRef)));
         (*instr).with_cycles(20).with_instruction_length(3);
     }
     case 0x09:
@@ -68,7 +69,7 @@ auto interpret_next_instruction(Memory& memory) -> unique_ptr<Instruction>
     {
         auto instr = make_unique<LoadByteInstruction>(
             move(memory.deref(*memory.get_word_register(WordRegister::BC))),
-            move(memory.get_register(Register::A)));
+            move(regA));
         (*instr).with_cycles(8).with_instruction_length(1);
         return instr;
     }
@@ -96,7 +97,7 @@ auto interpret_next_instruction(Memory& memory) -> unique_ptr<Instruction>
     case 0x12: // LD (DE),A
     {
         auto instr = make_unique<LoadByteInstruction>(
-            move(memory.get_register(Register::A)),
+            move(regA),
             move(memory.deref(*memory.get_word_register(WordRegister::DE))));
         (*instr).with_cycles(8).with_instruction_length(1);
         return instr;
@@ -119,7 +120,7 @@ auto interpret_next_instruction(Memory& memory) -> unique_ptr<Instruction>
     {
         auto instr = make_unique<LoadByteInstruction>(
             move(memory.deref(*memory.get_word_register(WordRegister::DE))),
-            move(memory.get_register(Register::A)));
+            move(regA));
         (*instr).with_cycles(8).with_instruction_length(1);
         return instr;
     }
@@ -147,7 +148,7 @@ auto interpret_next_instruction(Memory& memory) -> unique_ptr<Instruction>
     case 0x22: // LD (HL+),A
     {
         auto instr = make_unique<LoadByteInstruction>(
-            move(memory.get_register(Register::A)),
+            move(regA),
             move(memory.deref(*memory.get_word_register(WordRegister::HL))));
         (*instr).with_cycles(8).with_instruction_length(1).then([&memory]() {
             auto regHL = memory.get_word_register(WordRegister::HL);
@@ -172,7 +173,7 @@ auto interpret_next_instruction(Memory& memory) -> unique_ptr<Instruction>
     {
         auto instr = make_unique<LoadByteInstruction>(
             move(memory.deref(*memory.get_word_register(WordRegister::HL))),
-            move(memory.get_register(Register::A)));
+            move(regA));
         (*instr).with_cycles(8).with_instruction_length(1).then([&memory]() {
             auto regHL = memory.get_word_register(WordRegister::HL);
             regHL->write16(regHL->read16() + 1);
@@ -202,7 +203,7 @@ auto interpret_next_instruction(Memory& memory) -> unique_ptr<Instruction>
     case 0x32: // LD (HL-),A
     {
         auto instr = make_unique<LoadByteInstruction>(
-            move(memory.get_register(Register::A)),
+            move(regA),
             move(memory.deref(*memory.get_word_register(WordRegister::HL))));
         (*instr).with_cycles(8).with_instruction_length(1).then([&memory]() {
             auto regHL = memory.get_word_register(WordRegister::HL);
@@ -227,7 +228,7 @@ auto interpret_next_instruction(Memory& memory) -> unique_ptr<Instruction>
     {
         auto instr = make_unique<LoadByteInstruction>(
             move(memory.deref(*memory.get_word_register(WordRegister::HL))),
-            move(memory.get_register(Register::A)));
+            move(regA));
         (*instr).with_cycles(8).with_instruction_length(1).then([&memory]() {
             auto regHL = memory.get_word_register(WordRegister::HL);
             regHL->write16(regHL->read16() - 1);
@@ -240,7 +241,7 @@ auto interpret_next_instruction(Memory& memory) -> unique_ptr<Instruction>
     {
         auto instr = make_unique<LoadByteInstruction>(
             move(immediateByteRef),
-            move(memory.get_register(Register::A)));
+            move(regA));
         (*instr).with_cycles(8).with_instruction_length(1);
         return instr;
     }
@@ -304,7 +305,7 @@ auto interpret_next_instruction(Memory& memory) -> unique_ptr<Instruction>
     case 0x47: // LD B,A
     {
         auto instr = make_unique<LoadByteInstruction>(
-            move(memory.get_register(Register::A)),
+            move(regA),
             move(memory.get_register(Register::B)));
         (*instr).with_cycles(4).with_instruction_length(1);
         return instr;
@@ -368,7 +369,7 @@ auto interpret_next_instruction(Memory& memory) -> unique_ptr<Instruction>
     case 0x4F: // LD C,A
     {
         auto instr = make_unique<LoadByteInstruction>(
-            move(memory.get_register(Register::A)),
+            move(regA),
             move(memory.get_register(Register::C)));
         (*instr).with_cycles(4).with_instruction_length(1);
         return instr;
@@ -432,7 +433,7 @@ auto interpret_next_instruction(Memory& memory) -> unique_ptr<Instruction>
     case 0x57: // LD D,A
     {
         auto instr = make_unique<LoadByteInstruction>(
-            move(memory.get_register(Register::A)),
+            move(regA),
             move(memory.get_register(Register::D)));
         (*instr).with_cycles(4).with_instruction_length(1);
         return instr;
@@ -496,7 +497,7 @@ auto interpret_next_instruction(Memory& memory) -> unique_ptr<Instruction>
     case 0x5F: // LD E,A
     {
         auto instr = make_unique<LoadByteInstruction>(
-            move(memory.get_register(Register::A)),
+            move(regA),
             move(memory.get_register(Register::E)));
         (*instr).with_cycles(4).with_instruction_length(1);
         return instr;
@@ -560,7 +561,7 @@ auto interpret_next_instruction(Memory& memory) -> unique_ptr<Instruction>
     case 0x67: // LD H,A
     {
         auto instr = make_unique<LoadByteInstruction>(
-            move(memory.get_register(Register::A)),
+            move(regA),
             move(memory.get_register(Register::H)));
         (*instr).with_cycles(4).with_instruction_length(1);
         return instr;
@@ -624,7 +625,7 @@ auto interpret_next_instruction(Memory& memory) -> unique_ptr<Instruction>
     case 0x6F: // LD L,A
     {
         auto instr = make_unique<LoadByteInstruction>(
-            move(memory.get_register(Register::A)),
+            move(regA),
             move(memory.get_register(Register::L)));
         (*instr).with_cycles(4).with_instruction_length(1);
         return instr;
@@ -681,7 +682,7 @@ auto interpret_next_instruction(Memory& memory) -> unique_ptr<Instruction>
     case 0x77: // LD (HL),A
     {
         auto instr = make_unique<LoadByteInstruction>(
-            move(memory.get_register(Register::A)),
+            move(regA),
             move(memory.deref(*memory.get_word_register(WordRegister::HL))));
         (*instr).with_cycles(8).with_instruction_length(1);
         return instr;
@@ -690,7 +691,7 @@ auto interpret_next_instruction(Memory& memory) -> unique_ptr<Instruction>
     {
         auto instr = make_unique<LoadByteInstruction>(
             move(memory.get_register(Register::B)),
-            move(memory.get_register(Register::A)));
+            move(regA));
         (*instr).with_cycles(4).with_instruction_length(1);
         return instr;
     }
@@ -698,7 +699,7 @@ auto interpret_next_instruction(Memory& memory) -> unique_ptr<Instruction>
     {
         auto instr = make_unique<LoadByteInstruction>(
             move(memory.get_register(Register::C)),
-            move(memory.get_register(Register::A)));
+            move(regA));
         (*instr).with_cycles(4).with_instruction_length(1);
         return instr;
     }
@@ -706,7 +707,7 @@ auto interpret_next_instruction(Memory& memory) -> unique_ptr<Instruction>
     {
         auto instr = make_unique<LoadByteInstruction>(
             move(memory.get_register(Register::D)),
-            move(memory.get_register(Register::A)));
+            move(regA));
         (*instr).with_cycles(4).with_instruction_length(1);
         return instr;
     }
@@ -714,7 +715,7 @@ auto interpret_next_instruction(Memory& memory) -> unique_ptr<Instruction>
     {
         auto instr = make_unique<LoadByteInstruction>(
             move(memory.get_register(Register::E)),
-            move(memory.get_register(Register::A)));
+            move(regA));
         (*instr).with_cycles(4).with_instruction_length(1);
         return instr;
     }
@@ -722,7 +723,7 @@ auto interpret_next_instruction(Memory& memory) -> unique_ptr<Instruction>
     {
         auto instr = make_unique<LoadByteInstruction>(
             move(memory.get_register(Register::H)),
-            move(memory.get_register(Register::A)));
+            move(regA));
         (*instr).with_cycles(4).with_instruction_length(1);
         return instr;
     }
@@ -730,7 +731,7 @@ auto interpret_next_instruction(Memory& memory) -> unique_ptr<Instruction>
     {
         auto instr = make_unique<LoadByteInstruction>(
             move(memory.get_register(Register::L)),
-            move(memory.get_register(Register::A)));
+            move(regA));
         (*instr).with_cycles(4).with_instruction_length(1);
         return instr;
     }
@@ -738,15 +739,15 @@ auto interpret_next_instruction(Memory& memory) -> unique_ptr<Instruction>
     {
         auto instr = make_unique<LoadByteInstruction>(
             move(memory.deref(*memory.get_word_register(WordRegister::HL))),
-            move(memory.get_register(Register::A)));
+            move(regA));
         (*instr).with_cycles(8).with_instruction_length(1);
         return instr;
     }
     case 0x7F: // LD A,A
     {
         auto instr = make_unique<LoadByteInstruction>(
-            move(memory.get_register(Register::A)),
-            move(memory.get_register(Register::A)));
+            move(regA),
+            move(regA));
         (*instr).with_cycles(4).with_instruction_length(1);
         return instr;
     }
@@ -850,7 +851,7 @@ auto interpret_next_instruction(Memory& memory) -> unique_ptr<Instruction>
     {
         auto derefWith = get_ref_with_signed_offset(memory, *immediateByteRef);
         auto instr = make_unique<LoadByteInstruction>(
-            move(memory.get_register(Register::A)),
+            move(regA),
             move(memory.deref(*derefWith)));
         (*instr).with_cycles(12).with_instruction_length(2);
         return instr;
@@ -861,7 +862,7 @@ auto interpret_next_instruction(Memory& memory) -> unique_ptr<Instruction>
         auto derefWith = get_ref_with_signed_offset(memory, *memory.get_register(Register::C));
         auto instr = make_unique<LoadByteInstruction>(
             move(memory.deref(*derefWith)),
-            move(memory.get_register(Register::A)));
+            move(regA));
         (*instr).with_cycles(8).with_instruction_length(1);
         return instr;
     }
@@ -875,7 +876,7 @@ auto interpret_next_instruction(Memory& memory) -> unique_ptr<Instruction>
     case 0xEA: // LD (a16),A
     {
         auto instr = make_unique<LoadByteInstruction>(
-            move(memory.get_register(Register::A)),
+            move(regA),
             move(memory.deref(*immediateWordRef)));
         (*instr).with_cycles(8).with_instruction_length(1);
         return instr;
@@ -890,7 +891,7 @@ auto interpret_next_instruction(Memory& memory) -> unique_ptr<Instruction>
         auto derefWith = get_ref_with_signed_offset(memory, *immediateByteRef);
         auto instr = make_unique<LoadByteInstruction>(
             move(memory.deref(*derefWith)),
-            move(memory.get_register(Register::A)));
+            move(regA));
         (*instr).with_cycles(12).with_instruction_length(2);
         return instr;
     }
@@ -900,7 +901,7 @@ auto interpret_next_instruction(Memory& memory) -> unique_ptr<Instruction>
 
         auto derefWith = get_ref_with_signed_offset(memory, *memory.get_register(Register::C));
         auto instr = make_unique<LoadByteInstruction>(
-            move(memory.get_register(Register::A)),
+            move(regA),
             move(memory.deref(*derefWith)));
         (*instr).with_cycles(8).with_instruction_length(1);
         return instr;
@@ -911,7 +912,7 @@ auto interpret_next_instruction(Memory& memory) -> unique_ptr<Instruction>
     { // TODO: NOT DONE
         auto instr = make_unique<LoadWordInstruction>(
             move(memory.get_word_register(WordRegister::HL)),
-            move(memory.deref(*memory.get_word_register(WordRegister::SP))));
+            move(memory.deref_word(*memory.get_word_register(WordRegister::SP))));
         (*instr).with_cycles(8).with_instruction_length(1);
         return instr;
     }
@@ -938,7 +939,7 @@ auto interpret_next_instruction(Memory& memory) -> unique_ptr<Instruction>
     {
         auto instr = make_unique<LoadByteInstruction>(
             move(memory.deref(*immediateWordRef)),
-            move(memory.get_register(Register::A)));
+            move(regA));
         (*instr).with_cycles(16).with_instruction_length(3);
         return instr;
     }
