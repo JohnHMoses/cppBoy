@@ -9,7 +9,7 @@ using namespace std;
 namespace GameBoy {
 
 CPU::CPU(Memory& memory)
-    : m_memory(memory)
+    : memory(memory)
 {
 }
 
@@ -20,12 +20,12 @@ auto CPU::tick() -> void
 
 auto CPU::get_program_counter() -> unique_ptr<WordAddressable>
 {
-    return m_memory.get_word_register(WordRegister::PC);
+    return memory.get_word_register(WordRegister::PC);
 }
 
 auto CPU::get_stack_pointer() -> unique_ptr<WordAddressable>
 {
-    return m_memory.get_word_register(WordRegister::SP);
+    return memory.get_word_register(WordRegister::SP);
 }
 
 }

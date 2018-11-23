@@ -4,6 +4,7 @@
 #include "instruction/Instruction.h"
 #include "instruction/LoadByteInstruction.h"
 #include "instruction/LoadWordInstruction.h"
+#include "instruction/PushInstruction.h"
 #include "memory/ByteAddressable.h"
 #include "memory/Memory.h"
 
@@ -33,6 +34,7 @@ auto interpret_next_instruction(Memory& memory) -> unique_ptr<Instruction>
     auto regH = memory.get_register(Register::H);
     auto regL = memory.get_register(Register::L);
 
+    auto regAF = memory.get_word_register(WordRegister::AF);
     auto regBC = memory.get_word_register(WordRegister::BC);
     auto regDE = memory.get_word_register(WordRegister::DE);
     auto regHL = memory.get_word_register(WordRegister::HL);
@@ -835,7 +837,13 @@ auto interpret_next_instruction(Memory& memory) -> unique_ptr<Instruction>
     case 0xC2:
     case 0xC3:
     case 0xC4:
-    case 0xC5:
+    case 0xC5: // PUSH BC
+    {
+        auto instr = make_unique<PushInstruction>(
+            move(regBC));
+        (*instr).with_cycles(16).with_instruction_length(1);
+        return instr;
+    }
     case 0xC6:
     case 0xC7:
     case 0xC8:
@@ -851,7 +859,13 @@ auto interpret_next_instruction(Memory& memory) -> unique_ptr<Instruction>
     case 0xD2:
     case 0xD3:
     case 0xD4:
-    case 0xD5:
+    case 0xD5: // PUSH DE
+    {
+        auto instr = make_unique<PushInstruction>(
+            move(regDE));
+        (*instr).with_cycles(16).with_instruction_length(1);
+        return instr;
+    }
     case 0xD6:
     case 0xD7:
     case 0xD8:
@@ -883,7 +897,13 @@ auto interpret_next_instruction(Memory& memory) -> unique_ptr<Instruction>
     }
     case 0xE3:
     case 0xE4:
-    case 0xE5:
+    case 0xE5: // PUSH HL
+    {
+        auto instr = make_unique<PushInstruction>(
+            move(regHL));
+        (*instr).with_cycles(16).with_instruction_length(1);
+        return instr;
+    }
     case 0xE6:
     case 0xE7:
     case 0xE8:
@@ -924,11 +944,10 @@ auto interpret_next_instruction(Memory& memory) -> unique_ptr<Instruction>
     case 0xF3:
     case 0xF4:
     case 0xF5: // PUSH AF
-    { // TODO: NOT DONE
-        auto instr = make_unique<LoadWordInstruction>(
-            move(regHL),
-            move(memory.deref_word(*stackPointerRef)));
-        (*instr).with_cycles(8).with_instruction_length(1);
+    {
+        auto instr = make_unique<PushInstruction>(
+            move(regAF));
+        (*instr).with_cycles(16).with_instruction_length(1);
         return instr;
     }
     case 0xF6:

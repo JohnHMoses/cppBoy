@@ -74,13 +74,13 @@ auto Memory::get_word_register(WordRegister registerName) -> std::unique_ptr<Wor
     }
 }
 
-auto Memory::deref(WordAddressable& addressRef, uint16_t offset) -> std::unique_ptr<ByteAddressable>
+auto Memory::deref(WordAddressable& addressRef, int16_t offset) -> std::unique_ptr<ByteAddressable>
 {
     const auto address = addressRef.read16() + offset;
     return get_ref(address);
 }
 
-auto Memory::deref_word(WordAddressable& addressRef, uint16_t offset) -> std::unique_ptr<WordAddressable>
+auto Memory::deref_word(WordAddressable& addressRef, int16_t offset) -> std::unique_ptr<WordAddressable>
 {
     const auto address = addressRef.read16() + offset;
     return get_word_ref(address);

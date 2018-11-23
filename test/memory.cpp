@@ -146,7 +146,6 @@ TEST(MemoryTest, DerefPointsToAddressReadFromMemoryLocation) {
     auto testRef = mem.get_word_ref(0xCDEF);
     testRef->write16(0x5678);
 
-
     auto derefWith = mem.get_word_ref(0xC000);
     derefWith->write16(0xCDEF);
 
@@ -160,4 +159,17 @@ TEST(MemoryTest, DerefPointsToAddressReadFromMemoryLocation) {
     EXPECT_EQ(refFromDeref->read16(), testRef->read16());
     EXPECT_EQ(refFromDeref->read8(), testRef->read8());
 
+}
+
+TEST(MemoryTest, DerefInterpretsOffsetCorrectly) {
+    Memory mem;
+
+    mem.get_word_ref(0xC100)->write16(0x1234);
+    mem.get_word_ref(0xC104)->write16(0x5678);
+
+    auto derefWithBase = mem.get_word_ref(0xC200);
+    derefWithBase->write16(0xC102);
+
+    EXPECT_EQ(mem.deref_word(*derefWithBase, -2)->read16(), 0x1234);
+    EXPECT_EQ(mem.deref_word(*derefWithBase, 2)->read16(), 0x5678);
 }
