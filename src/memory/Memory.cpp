@@ -74,9 +74,9 @@ auto Memory::get_word_register(WordRegister registerName) -> std::unique_ptr<Wor
     }
 }
 
-auto Memory::operator[](Register registerName) -> BytePointer
+auto Memory::operator[](Register registerName) -> NewByteReference
 {
-    return BytePointer(move(get_register(registerName)));
+    return NewByteReference(move(get_register(registerName)));
 }
 
 auto Memory::deref(WordAddressable& addressRef, int16_t offset) -> std::unique_ptr<ByteAddressable>

@@ -1,7 +1,7 @@
 #include "gtest/gtest.h"
 
 #include "memory/ByteReference.h"
-#include "memory/BytePointer.h"
+#include "memory/NewByteReference.h"
 #include "memory/CompositeWordReference.h"
 #include "memory/Memory.h"
 #include "memory/WordReference.h"
@@ -42,12 +42,12 @@ TEST(BytePointerTest, BytePointerUpdatesValues) {
     uint8_t testValue = 42;
     auto byteRef = std::make_unique<ByteReference>(testValue);
 
-    BytePointer p1(move(byteRef));
-    uint8_t retrievedValue = *p1;
+    NewByteReference p1(move(byteRef));
+    uint8_t retrievedValue = p1;
     EXPECT_EQ(retrievedValue, 42);
 
-    BytePointer p2(p1);
-    *p2 = 10;
+    NewByteReference p2(p1);
+    p2 = 10;
     EXPECT_EQ(testValue, 10);
 
 }
