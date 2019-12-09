@@ -3,6 +3,7 @@
 #include "Registers.h"
 #include "memory/ByteAddressable.h"
 #include "memory/WordAddressable.h"
+#include "memory/BytePointer.h"
 
 #include <memory>
 #include <unordered_map>
@@ -47,6 +48,8 @@ public:
 
     auto get_register(Register registerName) -> std::unique_ptr<ByteAddressable>;
     auto get_word_register(WordRegister registerName) -> std::unique_ptr<WordAddressable>;
+
+    auto operator[](Register registerName) -> BytePointer;
 
     auto deref(WordAddressable& addressRef, int16_t offset = 0) -> std::unique_ptr<ByteAddressable>;
     auto deref_word(WordAddressable& addressRef, int16_t offset = 0) -> std::unique_ptr<WordAddressable>;
