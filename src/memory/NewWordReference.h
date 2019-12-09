@@ -1,7 +1,7 @@
 #pragma once
 
-#include "memory/WordAddressable.h"
 #include "memory/NewByteReference.h"
+#include "memory/WordAddressable.h"
 #include <memory>
 
 namespace GameBoy {

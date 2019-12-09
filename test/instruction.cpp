@@ -53,7 +53,7 @@ TEST_F(InstructionTest, LoadByte) {
         refA->write8(0x12);
         refB->write8(0x34);
 
-        LoadByteInstruction instr(move(refA), move(refB));
+        LoadByteInstruction instr(move(refB), move(refA));
         instr.execute(*cpu);
     }
 

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "memory/WordAddressable.h"
 #include "memory/ByteAddressable.h"
+#include "memory/WordAddressable.h"
 
 #include <stdint.h>
 

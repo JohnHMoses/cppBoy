@@ -5,17 +5,16 @@ using namespace std;
 namespace GameBoy {
 
 LoadByteInstruction::LoadByteInstruction(
-    std::unique_ptr<ByteAddressable>&& fromRef,
-    std::unique_ptr<ByteAddressable>&& toRef)
-    : m_fromRef(move(fromRef))
-    , m_toRef(move(toRef)) {};
+    const NewByteReference& to,
+    const NewByteReference& from)
+    : m_to(to)
+    , m_from(from) {};
 
 LoadByteInstruction::~LoadByteInstruction() = default;
 
 auto LoadByteInstruction::perform_operation(CPU& cpu) -> void
 {
-    const auto value = m_fromRef->read8();
-    m_toRef->write8(value);
+    m_to = static_cast<uint8_t>(m_from);
 }
 
 }
