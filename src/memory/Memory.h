@@ -2,8 +2,8 @@
 
 #include "Registers.h"
 #include "memory/ByteAddressable.h"
-#include "memory/WordAddressable.h"
 #include "memory/BytePointer.h"
+#include "memory/WordAddressable.h"
 
 #include <memory>
 #include <unordered_map>
