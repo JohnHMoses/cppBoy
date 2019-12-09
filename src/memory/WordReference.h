@@ -12,6 +12,8 @@ public:
     WordReference(uint16_t& value);
     ~WordReference() override;
 
+    auto clone() -> std::unique_ptr<WordAddressable> override;
+
     auto read8() -> uint8_t override;
     auto read16() -> uint16_t override;
 

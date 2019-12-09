@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 #include <stdint.h>
 
 namespace GameBoy {
@@ -8,6 +9,8 @@ namespace GameBoy {
 class WordAddressable {
 public:
     virtual ~WordAddressable();
+
+    virtual auto clone() -> std::unique_ptr<WordAddressable> = 0;
 
     virtual auto read8() -> uint8_t = 0;
     virtual auto read16() -> uint16_t = 0;

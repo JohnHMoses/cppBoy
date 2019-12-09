@@ -7,6 +7,11 @@ WordReference::WordReference(uint16_t& value)
 
 WordReference::~WordReference() = default;
 
+auto WordReference::clone() -> std::unique_ptr<WordAddressable>
+{
+    return std::make_unique<WordReference>(m_value);
+}
+
 auto WordReference::read8() -> uint8_t
 {
     return uint8_t(m_value);

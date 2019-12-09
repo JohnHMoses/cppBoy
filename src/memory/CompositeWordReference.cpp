@@ -14,6 +14,13 @@ CompositeWordReference::CompositeWordReference(unique_ptr<ByteAddressable>&& low
 
 CompositeWordReference::~CompositeWordReference() = default;
 
+auto CompositeWordReference::clone() -> std::unique_ptr<WordAddressable>
+{
+    return std::make_unique<CompositeWordReference>(
+        move(m_lower->clone()),
+        move(m_upper->clone()));
+}
+
 auto CompositeWordReference::read8() -> uint8_t
 {
     return m_lower->read8();
