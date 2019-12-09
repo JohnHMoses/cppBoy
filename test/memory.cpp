@@ -214,6 +214,7 @@ TEST(MemoryTest, NewReferenceDerefsEasily) {
     uint16_t v1 = refFromDeref;
     uint16_t v2 = testRef;
 
+    EXPECT_EQ(v1, 0x5678);
     EXPECT_EQ(v1, v2);
 
     testRef = 0xABCD;
@@ -221,5 +222,6 @@ TEST(MemoryTest, NewReferenceDerefsEasily) {
     v1 = refFromDeref;
     v2 = testRef;
 
+    EXPECT_EQ(v1, 0xABCD);
     EXPECT_EQ(v1, v2);
 }
