@@ -1,6 +1,7 @@
 #pragma once
 
 #include "memory/WordAddressable.h"
+#include "memory/ByteAddressable.h"
 
 #include <stdint.h>
 
@@ -13,6 +14,8 @@ public:
     ~WordReference() override;
 
     auto clone() -> std::unique_ptr<WordAddressable> override;
+
+    auto as_byte_address() -> std::unique_ptr<ByteAddressable> override;
 
     auto read8() -> uint8_t override;
     auto read16() -> uint16_t override;

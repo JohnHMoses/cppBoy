@@ -21,6 +21,11 @@ auto CompositeWordReference::clone() -> std::unique_ptr<WordAddressable>
         move(m_upper->clone()));
 }
 
+auto CompositeWordReference::as_byte_address() -> std::unique_ptr<ByteAddressable>
+{
+    return m_lower->clone();
+}
+
 auto CompositeWordReference::read8() -> uint8_t
 {
     return m_lower->read8();
