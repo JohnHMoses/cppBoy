@@ -199,3 +199,27 @@ TEST(MemoryTest, DerefInterpretsOffsetCorrectly) {
     EXPECT_EQ(mem.deref_word(*derefWithBase, -2)->read16(), 0x1234);
     EXPECT_EQ(mem.deref_word(*derefWithBase, 2)->read16(), 0x5678);
 }
+
+TEST(MemoryTest, NewReferenceDerefsEasily) {
+    Memory mem;
+
+    auto testRef = mem[0xCDEF];
+    testRef = 0x5678;
+
+    auto derefWith = mem[0xC000];
+    derefWith = 0xCDEF;
+
+    auto refFromDeref = mem[derefWith];
+
+    uint16_t v1 = refFromDeref;
+    uint16_t v2 = testRef;
+
+    EXPECT_EQ(v1, v2);
+
+    testRef = 0xABCD;
+
+    v1 = refFromDeref;
+    v2 = testRef;
+
+    EXPECT_EQ(v1, v2);
+}

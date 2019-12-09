@@ -3,6 +3,7 @@
 #include "Registers.h"
 #include "memory/ByteAddressable.h"
 #include "memory/NewByteReference.h"
+#include "memory/NewWordReference.h"
 #include "memory/WordAddressable.h"
 
 #include <memory>
@@ -50,6 +51,8 @@ public:
     auto get_word_register(WordRegister registerName) -> std::unique_ptr<WordAddressable>;
 
     auto operator[](Register registerName) -> NewByteReference;
+    auto operator[](WordRegister registerName) -> NewWordReference;
+    auto operator[](uint16_t address) -> NewWordReference;
 
     auto deref(WordAddressable& addressRef, int16_t offset = 0) -> std::unique_ptr<ByteAddressable>;
     auto deref_word(WordAddressable& addressRef, int16_t offset = 0) -> std::unique_ptr<WordAddressable>;

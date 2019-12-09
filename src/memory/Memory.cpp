@@ -79,6 +79,16 @@ auto Memory::operator[](Register registerName) -> NewByteReference
     return NewByteReference(move(get_register(registerName)));
 }
 
+auto Memory::operator[](WordRegister registerName) -> NewWordReference
+{
+    return NewWordReference(move(get_word_register(registerName)));
+}
+
+auto Memory::operator[](uint16_t address) -> NewWordReference
+{
+    return NewWordReference(move(get_word_ref(address)));
+}
+
 auto Memory::deref(WordAddressable& addressRef, int16_t offset) -> std::unique_ptr<ByteAddressable>
 {
     const auto address = addressRef.read16() + offset;
